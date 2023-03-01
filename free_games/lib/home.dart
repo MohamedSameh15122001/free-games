@@ -197,6 +197,29 @@ class Home extends StatelessWidget {
                       );
                     },
                     popupProps: PopupProps.menu(
+                      itemBuilder: (context, item, isSelected) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Text(
+                                item,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                            ),
+                          ],
+                        );
+                      },
+                      containerBuilder: (ctx, popupWidget) {
+                        return Container(
+                          color: Colors.grey[900],
+                          child: popupWidget,
+                        );
+                      },
                       showSelectedItems: true,
                       disabledItemFn: (String s) => s.startsWith('I'),
                     ),
@@ -249,6 +272,29 @@ class Home extends StatelessWidget {
                       );
                     },
                     popupProps: PopupProps.menu(
+                      itemBuilder: (context, item, isSelected) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Text(
+                                item,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                            ),
+                          ],
+                        );
+                      },
+                      containerBuilder: (ctx, popupWidget) {
+                        return Container(
+                          color: Colors.grey[900],
+                          child: popupWidget,
+                        );
+                      },
                       showSelectedItems: true,
                       disabledItemFn: (String s) => s.startsWith('I'),
                     ),
@@ -300,6 +346,29 @@ class Home extends StatelessWidget {
                       );
                     },
                     popupProps: PopupProps.menu(
+                      itemBuilder: (context, item, isSelected) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: Text(
+                                item,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                            ),
+                          ],
+                        );
+                      },
+                      containerBuilder: (ctx, popupWidget) {
+                        return Container(
+                          color: Colors.grey[900],
+                          child: popupWidget,
+                        );
+                      },
                       showSelectedItems: true,
                       disabledItemFn: (String s) => s.startsWith('I'),
                     ),
