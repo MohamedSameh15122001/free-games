@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:free_games/main_states.dart';
 import 'package:http/http.dart' as http;
@@ -116,7 +117,7 @@ class MainCubit extends Cubit<MainState> {
       url =
           'https://mmo-games.p.rapidapi.com/games?category=$category&platform=$platform&sort-by=$sortBy';
     } else {
-      print('shit');
+      // print('how');
     }
     final response = await http.get(
       Uri.parse(url),
@@ -131,7 +132,7 @@ class MainCubit extends Cubit<MainState> {
       emit(SuccessGetAllGamesState());
     } else {
       emit(ErrorGetAllGamesState());
-      print('Request failed with status: ${response.statusCode}.');
+      // print('Request failed with status: ${response.statusCode}.');
     }
   }
 
@@ -165,7 +166,7 @@ class MainCubit extends Cubit<MainState> {
       emit(SuccessGetSpecificGameState());
     } else {
       emit(ErrorGetSpecificGameState());
-      print('Request failed with status: ${response.statusCode}.');
+      // print('Request failed with status: ${response.statusCode}.');
     }
   }
 
@@ -227,6 +228,48 @@ class MainCubit extends Cubit<MainState> {
     'Release-Date',
     'Alphabetical',
   ];
+  //scroll
+  List<dynamic> displayedItems = [];
+  final ScrollController scrollController = ScrollController();
+  final pageController = PageController();
+  bool isScroll = true;
+
+  void loadMoreItems() {
+    final nextItems =
+        allGames.sublist(displayedItems.length, displayedItems.length + 10);
+
+    displayedItems.addAll(nextItems);
+    emit(ScrollState());
+  }
+
+  scroll() async {
+    await getAllGames();
+    displayedItems = allGames.take(10).toList();
+    scrollController.addListener(
+      () {
+        // print(scrollController.position.pixels);
+
+        if (scrollController.position.pixels >
+                scrollController.position.maxScrollExtent - 3000 ||
+            scrollController.position.pixels ==
+                scrollController.position.maxScrollExtent) {
+          if (isScroll) {
+            loadMoreItems();
+            isScroll = false;
+          }
+        }
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          isScroll = true;
+        }
+      },
+    );
+    // pageController.addListener(() {
+    //   final currentPage = pageController.page;
+
+    //   scrollController.dispose();
+    // });
+  }
 }
 // platform 
 // category 

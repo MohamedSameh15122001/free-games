@@ -1,12 +1,12 @@
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:free_games/constant.dart';
-import 'package:free_games/search.dart';
-import 'package:free_games/specific_game.dart';
 import 'main_cubit.dart';
 import 'main_states.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:free_games/search.dart';
+import 'package:free_games/constant.dart';
+import 'package:free_games/specific_game.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -20,10 +20,11 @@ class Home extends StatelessWidget {
       ),
     );
     return BlocConsumer<MainCubit, MainState>(
-      bloc: MainCubit.get(context)..getAllGames(),
+      bloc: MainCubit.get(context)..scroll(),
       listener: (context, state) {},
       builder: (context, state) {
         MainCubit ref = MainCubit.get(context);
+
         return Scaffold(
           backgroundColor: Colors.grey.shade900,
           appBar: AppBar(
@@ -63,8 +64,19 @@ class Home extends StatelessWidget {
           body: state is LoadingGetAllGamesState
               ? const Center(child: CircularProgressIndicator())
               : ListView.separated(
-                  itemCount: ref.allGames.length,
+                  controller: MainCubit.get(context).scrollController,
+                  itemCount: MainCubit.get(context).displayedItems.length + 1,
                   itemBuilder: (context, index) {
+                    if (index == MainCubit.get(context).displayedItems.length &&
+                        MainCubit.get(context).displayedItems.length <
+                            ref.allGames.length) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (MainCubit.get(context).displayedItems.length >=
+                        ref.allGames.length) {
+                      return Container();
+                    }
                     return InkWell(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(

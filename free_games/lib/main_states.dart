@@ -21,3 +21,5 @@ class ChangeCategorySelectedItem extends MainState {}
 class ChangeSortBySelectedItem extends MainState {}
 
 class SearhItem extends MainState {}
+
+class ScrollState extends MainState {}

@@ -23,7 +23,7 @@ class SpecificGame extends StatelessWidget {
       bloc: MainCubit.get(context)..getSpecificGame(id),
       listener: (context, state) {},
       builder: (context, state) {
-        print(id);
+        // print(id);
         MainCubit ref = MainCubit.get(context);
         return ref.specificGame.isEmpty
             ? const Center(child: CircularProgressIndicator())
