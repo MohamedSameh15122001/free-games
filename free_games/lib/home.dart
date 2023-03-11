@@ -63,106 +63,112 @@ class Home extends StatelessWidget {
           ),
           body: state is LoadingGetAllGamesState
               ? const Center(child: CircularProgressIndicator())
-              : ListView.separated(
-                  controller: MainCubit.get(context).scrollController,
-                  itemCount: MainCubit.get(context).displayedItems.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == MainCubit.get(context).displayedItems.length &&
-                        MainCubit.get(context).displayedItems.length <
-                            ref.allGames.length) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    await ref.scroll();
+                  },
+                  child: ListView.separated(
+                    controller: MainCubit.get(context).scrollController,
+                    itemCount: MainCubit.get(context).displayedItems.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index ==
+                              MainCubit.get(context).displayedItems.length &&
+                          MainCubit.get(context).displayedItems.length <
+                              ref.allGames.length) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (MainCubit.get(context).displayedItems.length >=
+                          ref.allGames.length) {
+                        return Container();
+                      }
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return SpecificGame(
+                                id: ref.allGames[index]['id'],
+                              );
+                            },
+                          ));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                ref.allGames[index]['title'],
+                                // textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                'release_date: ${ref.allGames[index]['release_date']}',
+                                // textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Image.network(
+                              ref.allGames[index]['thumbnail'],
+                              width: double.infinity,
+                              fit: BoxFit.contain,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                ref.allGames[index]['short_description'],
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'genre: ${ref.allGames[index]['genre']}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'platform: ${ref.allGames[index]['platform']}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'publisher: ${ref.allGames[index]['publisher']}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'developer: ${ref.allGames[index]['developer']}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
                       );
-                    } else if (MainCubit.get(context).displayedItems.length >=
-                        ref.allGames.length) {
-                      return Container();
-                    }
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return SpecificGame(
-                              id: ref.allGames[index]['id'],
-                            );
-                          },
-                        ));
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              ref.allGames[index]['title'],
-                              // textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              'release_date: ${ref.allGames[index]['release_date']}',
-                              // textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Image.network(
-                            ref.allGames[index]['thumbnail'],
-                            width: double.infinity,
-                            fit: BoxFit.contain,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              ref.allGames[index]['short_description'],
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'genre: ${ref.allGames[index]['genre']}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'platform: ${ref.allGames[index]['platform']}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'publisher: ${ref.allGames[index]['publisher']}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'developer: ${ref.allGames[index]['developer']}',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const Divider(
-                      color: Colors.white,
-                    );
-                  },
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider(
+                        color: Colors.white,
+                      );
+                    },
+                  ),
                 ),
           //----------------------------------------
           //the Drawer
